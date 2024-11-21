@@ -1,21 +1,20 @@
 import { retrieveWord } from '../prompts/languageClient.js'
-
-const definitions = {}
+import * as Data from '../persistence/definitionData.js'
 
 export const clearWords = () =>
-  Object.keys(definitions).forEach(key => delete definitions[key])
+  Data.deleteAll()
 
 export const loadDefinition = (word, definition) =>
-  definitions[word] = { ...definition, word }
+  Data.add(word, definition)
 
 export const addWord = async word => {
-  if (definitions[word]) return
+  if (Data.containsKey(word)) return
 
   const definition = await retrieveWord(word)
-  definitions[word] = { ...definition, word }
+  Data.add(word, { word, ...definition})
 }
 
-export const definition = word => definitions[word]
+export const definition = word => Data.get(word)
 
-export const allDefinitions = () =>
-  Object.values(definitions)
+export const allDefinitions = () => Data.allValues()
+
