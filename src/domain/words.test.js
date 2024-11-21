@@ -1,5 +1,5 @@
 import { when } from 'jest-when'
-import { addWord, clearWords, getWord, loadDefinition } from './words'
+import { addWord, clearWords, definition, allDefinitions, loadDefinition } from './words'
 import { retrieveWord } from '../prompts/languageClient'
 
 jest.mock('../prompts/languageClient')
@@ -10,6 +10,12 @@ describe('addWord', ()  => {
     gender: 'MI',
     singular: { nominative: 'pomeranč', accusative: 'pomeranč' },
     plural: { nominative: 'pomeranče', accusative: 'pomeranče' }
+  }
+  const dogDefinition = {
+    word: 'dog',
+    gender: 'MA',
+    singular: { nominative: 'pes', accusative: 'psa' },
+    plural: { nominative: 'psi', accusative: 'psy' }
   }
 
   beforeEach(() => {
@@ -23,15 +29,29 @@ describe('addWord', ()  => {
 
     await addWord('orange')
 
-    expect(getWord('orange')).toEqual(orangeDefinition)
+    expect(definition('orange')).toEqual(orangeDefinition)
   })
 
   it('returns a cached word when already added', async () => {
     loadDefinition('orange', orangeDefinition)
 
-    const word = await getWord('orange')
+    const word = await definition('orange')
 
     expect(word).toEqual(orangeDefinition)
     expect(retrieveWord).not.toHaveBeenCalled()
+  })
+
+  const add = async (word, definition) => {
+    when(retrieveWord).calledWith(word).mockResolvedValueOnce(definition)
+    await addWord(word)
+  }
+
+  it('persists multiple words', async () => {
+    await add('orange', orangeDefinition)
+    await add('dog', dogDefinition)
+
+    const definitions = allDefinitions()
+
+    expect(definitions).toEqual([orangeDefinition, dogDefinition])
   })
 })

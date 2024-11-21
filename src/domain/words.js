@@ -2,7 +2,8 @@ import { retrieveWord } from '../prompts/languageClient.js'
 
 const definitions = {}
 
-export const clearWords = () => Object.assign(definitions, undefined)
+export const clearWords = () =>
+  Object.keys(definitions).forEach(key => delete definitions[key])
 
 export const loadDefinition = (word, definition) =>
   definitions[word] = { ...definition, word }
@@ -14,6 +15,7 @@ export const addWord = async word => {
   definitions[word] = { ...definition, word }
 }
 
-export const getWord = word => {
-  return definitions[word]
-}
+export const definition = word => definitions[word]
+
+export const allDefinitions = () =>
+  Object.values(definitions)
