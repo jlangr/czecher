@@ -32,7 +32,7 @@ describe('addWord', ()  => {
     expect(definition('orange')).toEqual(orangeDefinition)
   })
 
-  it('returns a cached word when already added', async () => {
+  it('does nothing if already added', async () => {
     loadDefinition('orange', orangeDefinition)
 
     const word = await definition('orange')

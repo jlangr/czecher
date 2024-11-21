@@ -9,7 +9,7 @@ export const loadDefinition = (word, definition) =>
   definitions[word] = { ...definition, word }
 
 export const addWord = async word => {
-  if (definitions[word]) return word
+  if (definitions[word]) return
 
   const definition = await retrieveWord(word)
   definitions[word] = { ...definition, word }
