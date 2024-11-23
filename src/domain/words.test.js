@@ -25,7 +25,7 @@ describe('addWord', ()  => {
 
     const word = await definition('orange')
 
-    expect(word).toEqual(orangeDefinition)
+    expect(word).toEqual(TestWord.orangeDefinition)
     expect(retrieveWords).not.toHaveBeenCalled()
   })
 

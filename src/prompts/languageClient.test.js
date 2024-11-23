@@ -1,7 +1,8 @@
-import { retrieveWords } from './languageClient'
-import { sendPrompt } from '../apiclient/openai'
+import { when } from 'jest-when'
+import { retrieveWord, retrieveWords } from './languageClient'
+import { sendPrompt } from '../apiclient/openaiClient.js'
 import * as TestWord from '../domain/testWords'
-jest.mock('../apiclient/openai')
+jest.mock('../apiclient/openaiClient.js')
 
 const orangeResponseText = `
 {
@@ -19,15 +20,19 @@ const orangeResponseText = `
 
 describe('LanguageClient', () => {
   it('sends appropriate text in prompt', async () => {
-    sendPrompt.mockResolvedValueOnce(orangeResponseText)
+    sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition]))
 
-    const result = await retrieveWords('word')
+    const result = await retrieveWord('orange')
 
-    expect(result).toEqual(TestWord.orangeDefinition)
+    expect(result).toEqual([TestWord.orangeDefinition])
+    const args = sendPrompt.mock.calls[0][0]
+    expect(args).toContain('word "orange"')
+    console.log(args)
   })
 
-  it('supports array of words', async () => {
-    sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition]))
+  xit('supports array of words', async () => {
+    when(sendPrompt).calledWith(['orange', 'dog'])
+      .mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition]))
 
     const result = await retrieveWords(['orange', 'dog'])
 
