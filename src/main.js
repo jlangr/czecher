@@ -1,4 +1,4 @@
-import { retrieveWord } from './prompts/languageClient.js'
+import { retrieveWords } from './prompts/languageClient.js'
 
 const main = async () => {
   const args = process.argv.slice(2)
@@ -7,7 +7,7 @@ const main = async () => {
     return;
   }
 
-  const result = await retrieveWord(args[0])
+  const result = await retrieveWords(args[0])
   console.log(result)
 }
 

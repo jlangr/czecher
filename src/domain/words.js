@@ -1,5 +1,5 @@
-import { retrieveWord } from '../prompts/languageClient.js'
-import * as Data from '../persistence/database.js'
+import { retrieveWords } from '../prompts/languageClient'
+import * as Data from '../persistence/database'
 
 export const clearWords = () =>
   Data.deleteAll()
@@ -10,7 +10,7 @@ export const loadDefinition = (word, definition) =>
 export const addWord = async word => {
   if (Data.containsKey(word)) return
 
-  const definition = await retrieveWord(word)
+  const definition = await retrieveWords(word)
   Data.add(word, { word, ...definition})
 }
 

@@ -1,57 +1,45 @@
 import { when } from 'jest-when'
 import { addWord, clearWords, definition, allDefinitions, loadDefinition } from './words'
-import { retrieveWord } from '../prompts/languageClient'
+import { retrieveWords } from '../prompts/languageClient'
+import * as TestWord from './testWords'
 
 jest.mock('../prompts/languageClient')
 
 describe('addWord', ()  => {
-  const orangeDefinition = {
-    word: 'orange',
-    gender: 'MI',
-    singular: { nominative: 'pomeranč', accusative: 'pomeranč' },
-    plural: { nominative: 'pomeranče', accusative: 'pomeranče' }
-  }
-  const dogDefinition = {
-    word: 'dog',
-    gender: 'MA',
-    singular: { nominative: 'pes', accusative: 'psa' },
-    plural: { nominative: 'psi', accusative: 'psy' }
-  }
-
   beforeEach(() => {
     clearWords()
     jest.resetAllMocks()
   })
 
   it('retrieves and saves definition on add', async () => {
-    when(retrieveWord).calledWith('orange')
-      .mockResolvedValueOnce(orangeDefinition)
+    when(retrieveWords).calledWith('orange')
+      .mockResolvedValueOnce(TestWord.orangeDefinition)
 
     await addWord('orange')
 
-    expect(definition('orange')).toEqual(orangeDefinition)
+    expect(definition('orange')).toEqual(TestWord.orangeDefinition)
   })
 
   it('does nothing if already added', async () => {
-    loadDefinition('orange', orangeDefinition)
+    loadDefinition('orange', TestWord.orangeDefinition)
 
     const word = await definition('orange')
 
     expect(word).toEqual(orangeDefinition)
-    expect(retrieveWord).not.toHaveBeenCalled()
+    expect(retrieveWords).not.toHaveBeenCalled()
   })
 
   const add = async (word, definition) => {
-    when(retrieveWord).calledWith(word).mockResolvedValueOnce(definition)
+    when(retrieveWords).calledWith(word).mockResolvedValueOnce(definition)
     await addWord(word)
   }
 
   it('persists multiple words', async () => {
-    await add('orange', orangeDefinition)
-    await add('dog', dogDefinition)
+    await add('orange', TestWord.orangeDefinition)
+    await add('dog', TestWord.dogDefinition)
 
     const definitions = allDefinitions()
 
-    expect(definitions).toEqual([orangeDefinition, dogDefinition])
+    expect(definitions).toEqual([TestWord.orangeDefinition, TestWord.dogDefinition])
   })
 })

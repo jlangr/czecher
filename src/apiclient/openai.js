@@ -7,7 +7,7 @@ const createClient = () =>
 
 // TODO cache the client?
 
-export const prompt = async promptText => {
+export const sendPrompt = async promptText => {
   const response = await createClient().chat.completions.create({
     messages: [{ role: 'user', content: promptText }],
     model: 'gpt-4o'
