@@ -1,5 +1,5 @@
 import { retrieveWord } from '../prompts/languageClient.js'
-import * as Data from '../persistence/definitionData.js'
+import * as Data from '../persistence/database.js'
 
 export const clearWords = () =>
   Data.deleteAll()
