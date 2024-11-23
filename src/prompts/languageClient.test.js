@@ -1,6 +1,6 @@
 import { retrieveWord } from './languageClient';
 import { prompt } from '../clients/openai'
-jest.mock('../clients/openai.js')
+jest.mock('../clients/openai')
 
 const orangeDefinition = {
   word: 'orange',
