@@ -19,23 +19,26 @@ const orangeResponseText = `
 }`
 
 describe('LanguageClient', () => {
+  beforeEach(() => jest.resetAllMocks())
+
   it('sends appropriate text in prompt', async () => {
+    // when(sendPrompt).calledWith('orange')
     sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition]))
 
-    const result = await retrieveWord('orange')
+    const result = await retrieveWords(['orange'])
 
     expect(result).toEqual([TestWord.orangeDefinition])
     const args = sendPrompt.mock.calls[0][0]
     expect(args).toContain('word "orange"')
-    console.log(args)
   })
 
-  xit('supports array of words', async () => {
-    when(sendPrompt).calledWith(['orange', 'dog'])
-      .mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition]))
+  it('supports array of words', async () => {
+    sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition]))
 
     const result = await retrieveWords(['orange', 'dog'])
 
     expect(result).toEqual([TestWord.orangeDefinition, TestWord.dogDefinition])
+    const args = sendPrompt.mock.calls[0][0]
+    expect(args).toContain('words "orange","dog"')
   })
 })

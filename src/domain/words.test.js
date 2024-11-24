@@ -1,42 +1,50 @@
 import { when } from 'jest-when'
-import { addWord, clearWords, definition, allDefinitions, loadDefinition } from './words'
+import { addWords, clearWords, definition, allDefinitions, persist } from './words'
 import { retrieveWords } from '../prompts/languageClient'
 import * as TestWord from './testWords'
+import { containsKey } from '../persistence/database.js'
 
 jest.mock('../prompts/languageClient')
 
-describe('addWord', ()  => {
+describe('addWords', ()  => {
   beforeEach(() => {
     clearWords()
     jest.resetAllMocks()
   })
 
   it('retrieves and saves definition on add', async () => {
-    when(retrieveWords).calledWith('orange')
-      .mockResolvedValueOnce(TestWord.orangeDefinition)
+    when(retrieveWords).calledWith(['orange'])
+      .mockResolvedValueOnce([TestWord.orangeDefinition])
 
-    await addWord('orange')
+    await addWords('orange')
 
     expect(definition('orange')).toEqual(TestWord.orangeDefinition)
   })
 
-  it('does nothing if already added', async () => {
-    loadDefinition('orange', TestWord.orangeDefinition)
+  it('only calls retrieveWords with new words', async () => {
+    persist('cow', TestWord.cowDefinition)
+    when(retrieveWords).calledWith(['orange', 'dog'])
+      .mockResolvedValueOnce([TestWord.orangeDefinition, TestWord.dogDefinition])
 
-    const word = await definition('orange')
+    await addWords('orange, dog, cow')
 
-    expect(word).toEqual(TestWord.orangeDefinition)
-    expect(retrieveWords).not.toHaveBeenCalled()
+    expect(retrieveWords).toHaveBeenCalledWith(['orange', 'dog'])
   })
 
-  const add = async (word, definition) => {
-    when(retrieveWords).calledWith(word).mockResolvedValueOnce(definition)
-    await addWord(word)
-  }
+  it('retrieves and saves definitions for multiple words', async () => {
+    when(retrieveWords).calledWith(['orange', 'dog'])
+      .mockResolvedValueOnce([TestWord.orangeDefinition, TestWord.dogDefinition])
 
-  it('persists multiple words', async () => {
-    await add('orange', TestWord.orangeDefinition)
-    await add('dog', TestWord.dogDefinition)
+    await addWords('orange, dog')
+
+    expect(definition('orange')).toEqual(TestWord.orangeDefinition)
+    expect(definition('dog')).toEqual(TestWord.dogDefinition)
+  })
+
+  it('returns all definitions', async () => {
+    when(retrieveWords).calledWith(['orange', 'dog'])
+      .mockResolvedValueOnce([TestWord.orangeDefinition, TestWord.dogDefinition])
+    await addWords('orange, dog')
 
     const definitions = allDefinitions()
 

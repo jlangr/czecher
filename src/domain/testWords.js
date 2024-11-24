@@ -11,3 +11,10 @@ export const dogDefinition = {
   singular: { nominative: 'pes', accusative: 'psa' },
   plural: { nominative: 'psi', accusative: 'psy' }
 }
+
+export const cowDefinition = {
+  word: 'krava',
+  gender: 'F',
+  singular: { nominative: 'krava', accusative: 'kravu' },
+  plural: { nominative: 'psi', accusative: 'psy' }
+}

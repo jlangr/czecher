@@ -1,7 +1,6 @@
 import { sendPrompt } from '../apiclient/openaiClient.js'
 
-export const retrieveWords = async words => {
-  const format = `Response must be a parseable array of JSON objects, with no additional data. Example of the required format:
+const format = `Response must be a parseable array of JSON objects, with no additional data. Example of the required format:
    [{
       word: 'orange',
       gender: 'MI',
@@ -17,10 +16,15 @@ export const retrieveWords = async words => {
    
    The "gender" key must be one of MA (masculine animate), MI (masculine inanimate), F (feminine), and N (neuter).
   `
-  const wordPrefix = words.length === 1 ? 'word' : 'words '
-  const wordList = words.join(',')
-  const finalPrompt = `Given a list of English nouns, separated by commas, provide appropriate Czech language information for the ${wordPrefix} "${wordList}"`
+
+export const retrieveWords = async words => {
+  const wordPrefix = words.length === 1 ? 'word' : 'words'
+  const wordList = words.map(word => `"${word}"`).join(',')
+
+  const finalPrompt = `Given a list of English nouns, separated by commas, provide appropriate Czech language information for the ${wordPrefix} ${wordList}`
+
   const response = await sendPrompt(`${format} ${finalPrompt}`)
+
   return JSON.parse(response)
 }
 

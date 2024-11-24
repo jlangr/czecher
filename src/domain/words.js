@@ -1,17 +1,22 @@
-import { retrieveWords } from '../prompts/languageClient'
-import * as Data from '../persistence/database'
+import { retrieveWords } from '../prompts/languageClient.js'
+import * as Data from '../persistence/database.js'
 
 export const clearWords = () =>
   Data.deleteAll()
 
-export const loadDefinition = (word, definition) =>
-  Data.add(word, definition)
+export const persist = (word, definition) => Data.add(word, definition)
 
-export const addWord = async word => {
-  if (Data.containsKey(word)) return
+export const addWords = async words => {
+  const wordList = words
+    .split(',')
+    .map(word => word.trim())
+    .filter(word => !Data.containsKey(word))
 
-  const definition = await retrieveWords(word)
-  Data.add(word, { word, ...definition})
+  const definitions = await retrieveWords(wordList)
+  definitions.forEach(definition => {
+    if (!Data.containsKey(definition.word))
+      persist(definition.word, definition)
+  })
 }
 
 export const definition = word => Data.get(word)
