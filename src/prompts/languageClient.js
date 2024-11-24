@@ -19,17 +19,21 @@ const format = `Response must be a parseable array of JSON objects, with no addi
 
 export const retrieveWords = async words => {
   const wordPrefix = words.length === 1 ? 'word' : 'words'
-  const wordList = words.map(word => `"${word}"`).join(',')
-
-  const finalPrompt = `Given a list of English nouns, separated by commas, provide appropriate Czech language information for the ${wordPrefix} ${wordList}`
-
+  let wordList = "";
+  for (let i = 0; i < words.length; i++) {
+    const currentWord = words[i];
+    const quotedWord = '"' + currentWord + '"';
+    wordList += quotedWord;
+    if (i !== words.length - 1) {
+      wordList += ",";
+    }
+  }
+  const finalPrompt = `Given a list of English nouns, separated by commas, ` +
+    `provide appropriate Czech language information for the ${wordPrefix} ${wordList}`
   const response = await sendPrompt(`${format} ${finalPrompt}`)
-
   const startIndex = response.indexOf('[')
   const endIndex = response.lastIndexOf(']') + 1
   const jsonText = response.slice(startIndex, endIndex)
-
-  console.log(jsonText)
   return JSON.parse(jsonText)
 }
 
