@@ -17,20 +17,26 @@ const format = `Response must be a parseable array of JSON objects, with no addi
    The "gender" key must be one of MA (masculine animate), MI (masculine inanimate), F (feminine), and N (neuter).
   `
 
-export const retrieveWords = async words => {
-  const wordPrefix = words.length === 1 ? 'word' : 'words'
-  const wordList = words.map(word => `"${word}"`).join(',')
+const sliceJSONArrayFrom = response => {
+  const startIndex = response.indexOf('[')
+  const endIndex = response.lastIndexOf(']') + 1
+  return response.slice(startIndex, endIndex)
+}
 
-  const finalPrompt = `Given a list of English nouns, separated by commas, provide appropriate Czech language information for the ${wordPrefix} ${wordList}`
+const joinQuoted = words =>
+  words.map(word => `"${word}"`).join(',')
+
+const pluralizeIfMany = (word, list) =>
+  list.length === 1 ? word : `${word}s`
+
+export const retrieveWords = async words => {
+  const finalPrompt = `Given a list of English nouns, separated by commas, ` +
+    `provide appropriate Czech language information for the ` +
+    `${(pluralizeIfMany('word', words))} ${(joinQuoted(words))}`
 
   const response = await sendPrompt(`${format} ${finalPrompt}`)
 
-  const startIndex = response.indexOf('[')
-  const endIndex = response.lastIndexOf(']') + 1
-  const jsonText = response.slice(startIndex, endIndex)
-
-  console.log(jsonText)
-  return JSON.parse(jsonText)
+  return JSON.parse(sliceJSONArrayFrom(response))
 }
 
 export const retrieveWord = async word => retrieveWords([word])
