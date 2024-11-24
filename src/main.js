@@ -1,4 +1,4 @@
-import { addWords, allDefinitions } from './domain/words.js'
+import { addNouns, allNouns } from './domain/words.js'
 
 const main = async () => {
   const args = process.argv.slice(2)
@@ -7,9 +7,9 @@ const main = async () => {
     return;
   }
 
-  await addWords(args[0])
+  await addNouns(args[0])
 
-  console.log(allDefinitions())
+  console.log(allNouns())
 }
 
 await main()

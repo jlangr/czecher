@@ -1,12 +1,18 @@
-const data = {}
+export const nounTable = 'nouns'
+export const adjectiveTable = 'adjectives'
 
-export const containsKey = key => !!data[key]
+const data = {
+  [nounTable]: {},
+  [adjectiveTable]: {}
+}
 
-export const deleteAll = () =>
-  Object.keys(data).forEach(key => delete data[key])
+export const containsKey = (table, key) => !!data[table][key]
 
-export const add = (key, value) => data[key] = value
+export const truncate = (table) =>
+  Object.keys(data[table]).forEach(key => delete data[table][key])
 
-export const get = word => data[word]
+export const add = (table, key, value) => data[table][key] = value
 
-export const allValues = () => Object.values(data)
+export const get = (table, word) => data[table][word]
+
+export const all = (table) => Object.values(data[table])

@@ -1,5 +1,5 @@
 import { when } from 'jest-when'
-import { retrieveWord, retrieveWords } from './languageClient'
+import { retrieveWord, retrieveNouns } from './languageClient'
 import { sendPrompt } from '../apiclient/openaiClient.js'
 import * as TestWord from '../domain/testWords'
 jest.mock('../apiclient/openaiClient.js')
@@ -25,7 +25,7 @@ describe('LanguageClient', () => {
     // when(sendPrompt).calledWith('orange')
     sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition]))
 
-    const result = await retrieveWords(['orange'])
+    const result = await retrieveNouns(['orange'])
 
     expect(result).toEqual([TestWord.orangeDefinition])
     const args = sendPrompt.mock.calls[0][0]
@@ -35,7 +35,7 @@ describe('LanguageClient', () => {
   it('supports array of words', async () => {
     sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition]))
 
-    const result = await retrieveWords(['orange', 'dog'])
+    const result = await retrieveNouns(['orange', 'dog'])
 
     expect(result).toEqual([TestWord.orangeDefinition, TestWord.dogDefinition])
     const args = sendPrompt.mock.calls[0][0]
@@ -49,7 +49,7 @@ describe('LanguageClient', () => {
 ${JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition])}
 ${sillyPostfix}`)
 
-    const result = await retrieveWords(['orange', 'dog'])
+    const result = await retrieveNouns(['orange', 'dog'])
 
     expect(result).toEqual([TestWord.orangeDefinition, TestWord.dogDefinition])
     const args = sendPrompt.mock.calls[0][0]
