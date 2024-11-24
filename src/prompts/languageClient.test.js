@@ -41,4 +41,18 @@ describe('LanguageClient', () => {
     const args = sendPrompt.mock.calls[0][0]
     expect(args).toContain('words "orange","dog"')
   })
+
+  it('can handle prefix and postfix data around JSON', async () => {
+    const sillyPrefix = "```json"
+    const sillyPostfix = "```"
+    sendPrompt.mockResolvedValueOnce(`${sillyPrefix}
+${JSON.stringify([TestWord.orangeDefinition, TestWord.dogDefinition])}
+${sillyPostfix}`)
+
+    const result = await retrieveWords(['orange', 'dog'])
+
+    expect(result).toEqual([TestWord.orangeDefinition, TestWord.dogDefinition])
+    const args = sendPrompt.mock.calls[0][0]
+    expect(args).toContain('words "orange","dog"')
+  })
 })

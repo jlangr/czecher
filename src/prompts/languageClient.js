@@ -25,7 +25,12 @@ export const retrieveWords = async words => {
 
   const response = await sendPrompt(`${format} ${finalPrompt}`)
 
-  return JSON.parse(response)
+  const startIndex = response.indexOf('[')
+  const endIndex = response.lastIndexOf(']') + 1
+  const jsonText = response.slice(startIndex, endIndex)
+
+  console.log(jsonText)
+  return JSON.parse(jsonText)
 }
 
 export const retrieveWord = async word => retrieveWords([word])

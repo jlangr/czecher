@@ -13,8 +13,8 @@ export const dogDefinition = {
 }
 
 export const cowDefinition = {
-  word: 'krava',
+  word: 'cow',
   gender: 'F',
-  singular: { nominative: 'krava', accusative: 'kravu' },
-  plural: { nominative: 'psi', accusative: 'psy' }
+  singular: { nominative: 'kráva', accusative: 'krávu' },
+  plural: { nominative: 'krávy', accusative: 'krávy' }
 }
