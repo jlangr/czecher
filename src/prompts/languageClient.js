@@ -22,14 +22,15 @@ export const retrieveWords = async words => {
   let wordList = "";
   for (let i = 0; i < words.length; i++) {
     const currentWord = words[i];
-    const quotedWord = '"' + currentWord + '"';
+    let quotedWord = '"' + currentWord + '"';
     wordList += quotedWord;
     if (i !== words.length - 1) {
       wordList += ",";
     }
   }
   const finalPrompt = `Given a list of English nouns, separated by commas, ` +
-    `provide appropriate Czech language information for the ${wordPrefix} ${wordList}`
+`provide appropriate Czech language information for the ${wordPrefix} ${wordList}`
+  console.log('final prompt: ', finalPrompt)
   const response = await sendPrompt(`${format} ${finalPrompt}`)
   const startIndex = response.indexOf('[')
   const endIndex = response.lastIndexOf(']') + 1
