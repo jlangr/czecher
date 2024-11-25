@@ -29,16 +29,17 @@ const joinQuoted = words =>
 const pluralizeIfMany = (word, list) =>
   list.length === 1 ? word : `${word}s`
 
+const request = (wordPart, words) => `Given a list of English ${wordPart}, separated by commas, ` +
+  `provide appropriate Czech language information for ` +
+  `the ${(pluralizeIfMany('word', words))} ${(joinQuoted(words))}`
+
 export const retrieveAdjectives = async words => {
+  const response = await sendPrompt(`${format} ${request('adjectives', words)}`)
+  return JSON.parse(sliceJSONArrayFrom(response))
 }
 
 export const retrieveNouns = async words => {
-  const finalPrompt = `Given a list of English nouns, separated by commas, ` +
-    `provide appropriate Czech language information for the ` +
-    `${(pluralizeIfMany('word', words))} ${(joinQuoted(words))}`
-
-  const response = await sendPrompt(`${format} ${finalPrompt}`)
-
+  const response = await sendPrompt(`${format} ${request('nouns', words)}`)
   return JSON.parse(sliceJSONArrayFrom(response))
 }
 

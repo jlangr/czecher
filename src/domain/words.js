@@ -5,15 +5,15 @@ import { adjectiveTable, nounTable } from '../persistence/database.js'
 export const truncateNouns = () =>
   Data.truncate(nounTable)
 
+export const truncateAdjectives = () =>
+  Data.truncate(adjectiveTable)
+
 export const persist = (table, word, definition) => Data.add(table, word, definition)
 
-function wordsToAdd(words, table) {
-  const wordList = words
-    .split(',')
-    .map(word => word.trim())
-    .filter(word => !Data.containsKey(table, word))
-  return wordList
-}
+const wordsToAdd = (words, table) => words
+  .split(',')
+  .map(word => word.trim())
+  .filter(word => !Data.containsKey(table, word))
 
 function persistAll(definitions, table) {
   definitions.forEach(definition => persist(table, definition.word, definition))

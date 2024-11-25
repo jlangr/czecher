@@ -1,5 +1,14 @@
 import { when } from 'jest-when'
-import { addNouns, definition, allNouns, persist, truncateNouns, addAdjectives, allAdjectives } from './words'
+import {
+  addNouns,
+  definition,
+  allNouns,
+  persist,
+  truncateNouns,
+  addAdjectives,
+  allAdjectives,
+  truncateAdjectives
+} from './words'
 import { retrieveAdjectives, retrieveNouns } from '../prompts/languageClient'
 import * as TestWord from './testWords'
 import { nounTable } from '../persistence/database.js'
@@ -9,6 +18,7 @@ jest.mock('../prompts/languageClient')
 describe('addWords', ()  => {
   beforeEach(() => {
     truncateNouns()
+    truncateAdjectives()
     jest.resetAllMocks()
   })
 
