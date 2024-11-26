@@ -1,28 +1,12 @@
-import { when } from 'jest-when'
-import { retrieveWord, retrieveNouns } from './languageClient'
-import { sendPrompt } from '../apiclient/openaiClient.js'
+import { retrieveNouns } from './languageClient'
+import { sendPrompt } from '../apiclient/openaiClient'
 import * as TestWord from '../domain/testWords'
-jest.mock('../apiclient/openaiClient.js')
-
-const orangeResponseText = `
-{
-  "word": "orange",
-  "gender": "MI",
-  "singular": {
-    "nominative": "pomeranč",
-    "accusative": "pomeranč"
-  },
-  "plural": {
-    "nominative": "pomeranče",
-    "accusative": "pomeranče"
-  }
-}`
+jest.mock('../apiclient/openaiClient')
 
 describe('LanguageClient', () => {
   beforeEach(() => jest.resetAllMocks())
 
   it('sends appropriate text in prompt', async () => {
-    // when(sendPrompt).calledWith('orange')
     sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition]))
 
     const result = await retrieveNouns(['orange'])

@@ -13,12 +13,36 @@ export let largeDefinition = {
 export let youngDefinition = {
   word: 'young',
   nominative: {
-    singular: { ma: '', mi: '', f: '', n: '' },
-    plural: { ma: '', mi: '', f: '', n: '' }
+    singular: { ma: 'mladý', mi: 'mladý', f: 'mladá', n: 'mladé' },
+    plural: { ma: 'mladí', mi: 'mladé', f: 'mladé', n: 'mladá' }
   },
   accusative: {
-    singular: { ma: '', mi: '', f: '', n: '' },
-    plural: { ma: '', mi: '', f: '', n: '' }
+    singular: { ma: 'mladého', mi: 'mladý', f: 'mladou', n: 'mladé' },
+    plural: { ma: 'mladé', mi: 'mladé', f: 'mladé', n: 'mladá' }
+  }
+}
+
+export const smallDefinition = {
+  word: 'small',
+  nominative: {
+    singular: { ma: 'malý', mi: 'malý', f: 'malá', n: 'malé' },
+    plural: { ma: 'malí', mi: 'malé', f: 'malé', n: 'malá' }
+  },
+  accusative: {
+    singular: { ma: 'malého', mi: 'malý', f: 'malou', n: 'malé' },
+    plural: { ma: 'malé', mi: 'malé', f: 'malé', n: 'malá' }
+  }
+}
+
+export const prettyDefinition =  {
+  word: 'pretty',
+  nominative: {
+    singular: { ma: 'hezký', mi: 'hezký', f: 'hezká', n: 'hezké' },
+    plural: { ma: 'hezci', mi: 'hezké', f: 'hezké', n: 'hezká' }
+  },
+  accusative: {
+    singular: { ma: 'hezkého', mi: 'hezký', f: 'hezkou', n: 'hezké' },
+    plural: { ma: 'hezké', mi: 'hezké', f: 'hezké', n: 'hezká' }
   }
 }
 

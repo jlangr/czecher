@@ -1,15 +1,27 @@
-import { addNouns, allNouns } from './domain/words.js'
+import { addAdjectives, addNouns, allAdjectives, allNouns } from './domain/words.js'
 
 const main = async () => {
-  const args = process.argv.slice(2)
+  const argstring = process.argv.slice(2)
+  const args = argstring[0].split(' ')
+
   if (args.length === 0) {
-    console.log('provide a comma-separated list of words as an argument')
+    console.log('usage: [N|A] word1,word2,...')
     return;
   }
 
-  await addNouns(args[0])
-
-  console.log(allNouns())
+  const type = args[0].toUpperCase()
+  const words = args[1]
+  console.log(`${type}-${words}`)
+  switch (type) {
+    case 'A':
+      await addAdjectives(words)
+      console.dir("adjectives:\n", allAdjectives(), { depth: null })
+      break
+    case 'N':
+      await addNouns(words)
+      console.dir("nouns:\n", allNouns(), { depth: null })
+      break
+  }
 }
 
 await main()

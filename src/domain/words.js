@@ -15,9 +15,8 @@ const wordsToAdd = (words, table) => words
   .map(word => word.trim())
   .filter(word => !Data.containsKey(table, word))
 
-function persistAll(definitions, table) {
+const persistAll = (definitions, table) =>
   definitions.forEach(definition => persist(table, definition.word, definition))
-}
 
 export const addNouns = async words => {
   const definitions = await retrieveNouns(wordsToAdd(words, nounTable))
