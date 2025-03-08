@@ -23,10 +23,7 @@ export const retrieveAdjectives = async words => {
   return JSON.parse(sliceJSONArrayFrom(response))
 }
 
-export const retrieveNouns = async words => {
-  const response = await sendPrompt(createPromptText(nounResponseFormat, 'nouns', words))
+export const retrieveNouns = async (words, sendPromptFn) => {
+  const response = await sendPromptFn(createPromptText(nounResponseFormat, 'nouns', words))
   return JSON.parse(sliceJSONArrayFrom(response))
 }
-
-export const retrieveWord = async word => retrieveNouns([word])
-

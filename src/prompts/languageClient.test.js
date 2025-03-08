@@ -7,12 +7,13 @@ describe('LanguageClient', () => {
   beforeEach(() => jest.resetAllMocks())
 
   it('sends appropriate text in prompt', async () => {
-    sendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition]))
+    const llmClientSendPrompt = jest.fn()
+    llmClientSendPrompt.mockResolvedValueOnce(JSON.stringify([TestWord.orangeDefinition]))
 
-    const result = await retrieveNouns(['orange'])
+    const result = await retrieveNouns(['orange'], llmClientSendPrompt)
 
     expect(result).toEqual([TestWord.orangeDefinition])
-    const args = sendPrompt.mock.calls[0][0]
+    const args = llmClientSendPrompt.mock.calls[0][0]
     expect(args).toContain('word "orange"')
   })
 

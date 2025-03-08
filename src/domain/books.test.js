@@ -30,7 +30,7 @@ const books = [
   }
 ];
 
-const OKmostExpensiveHighlyRatedBookInEachCategory = (books) => {
+const mostExpensiveHighlyRatedBookInEachCategory = (books) => {
   const result = books.flatMap(category => {
     return category.books
       .filter(book => book.rating > 4.0)
